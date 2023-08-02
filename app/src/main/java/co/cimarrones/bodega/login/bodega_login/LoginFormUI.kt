@@ -1,4 +1,4 @@
-package co.cimarrones.bodega.login
+package co.cimarrones.bodega.login.bodega_login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -12,20 +12,28 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import co.cimarrones.bodega.R
 import co.cimarrones.bodega.ui.theme.Shapes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginFormUI() {
+fun LoginFormUI(vm: LoginUIViewModel = hiltViewModel()) {
     val isDarkTheme = isSystemInDarkTheme()
+    val uiState by vm.uiState.collectAsState()
+    val focusRequester = remember { FocusRequester() }
     fun composeModifier(testTag: String): Modifier {
         val padding = 8.dp
         return Modifier
@@ -55,16 +63,19 @@ fun LoginFormUI() {
         }
 
         OutlinedTextField(
-            modifier = composeModifier("dni"),
-            onValueChange = { },
-            value = "",
+            modifier = composeModifier("dni")
+                .onFocusChanged { vm.onDniFocusChange(it) },
+            onValueChange = { vm.onDniChange(it) },
+            value = uiState.dni,
             label = { Text("DNI") },
+            isError = uiState.dniError,
         )
 
         OutlinedTextField(
-            modifier = composeModifier("password"),
-            value = "",
-            onValueChange = { },
+            modifier = composeModifier("password")
+                .onFocusChanged { vm.onPasswordChange(it) },
+            value = uiState.password,
+            onValueChange = { vm.onPasswordChange(it) },
             label = { Text(text = "Password") },
             visualTransformation = PasswordVisualTransformation(),
         )
@@ -73,14 +84,14 @@ fun LoginFormUI() {
             modifier = composeModifier("submit-button")
                 .height(50.dp),
             onClick = { },
-            shape = Shapes.medium,
+            shape = Shapes.large,
             content = { Text(text = "Login") }
         )
     }
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 fun PrevLoginFormUI() {
     LoginFormUI()
 }
