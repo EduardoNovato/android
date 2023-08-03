@@ -2,4 +2,11 @@
     <string name="app_name">Bodega</string>
     <string name="network_connectivity_lost_error_message">Network (WIFI) connectivity Lost, please check your network.</string>
     <string name="socket_timeout_error_message">The server is taking to long to respond, this can be caused by either poor connectivity or an error with the server. Please verify both.</string>
+    <string name="message_invalid_email">The Email you entered is not valid. Please check and try again.</string>
+    <string name="message_invalid_password">Sorry, the Password you entered is incorrect. Please double-check your password and try again.</string>
+
+    <!--Login-->
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="login_label_button">Login</string>
 </resources>

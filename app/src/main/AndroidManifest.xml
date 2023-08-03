@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
     <application
         android:name=".BodegaApplication"
         android:allowBackup="true"
@@ -14,15 +16,20 @@
         android:theme="@style/Theme.Bodega"
         tools:targetApi="31">
         <activity
-            android:name=".main.MainActivity"
+            android:name=".login.bodega_login.LoginUIActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Bodega">
+            android:theme="@style/Theme.Bodega"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".main.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Bodega">
         </activity>
     </application>
 
