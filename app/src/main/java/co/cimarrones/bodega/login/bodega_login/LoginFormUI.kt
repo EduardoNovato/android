@@ -57,6 +57,58 @@ fun LoginFormUI(vm: LoginUIViewModel = hiltViewModel()) {
             .padding(padding)
             .fillMaxWidth()
     }
+
+    @Composable
+    fun Logo() {
+        val logoResource = if (isDarkTheme) R.drawable.ic_logo_login_d else R.drawable.ic_logo_login
+        Image(
+            painter = painterResource(id = logoResource),
+            contentDescription = "stringResource(id = R.string.logo_content_description)",
+            modifier = Modifier.testTag("CompanyImage")
+        )
+    }
+
+    @Composable
+    fun EmailField() {
+        OutlinedTextField(
+            value = uiState.email,
+            onValueChange = { vm.onDniChange(it) },
+            modifier = composeModifier("dni")
+                .onFocusChanged { vm.onDniFocusChange(it) },
+            enabled = !uiState.loading,
+            label = { Text(stringResource(id = R.string.email_label)) },
+            isError = uiState.emailError,
+        )
+    }
+
+    @Composable
+    fun PasswordField() {
+        OutlinedTextField(
+            value = uiState.password,
+            onValueChange = { vm.onPasswordChange(it) },
+            modifier = composeModifier("password")
+                .onFocusChanged { vm.onPasswordChange(it) },
+            enabled = !uiState.loading,
+            label = { Text(stringResource(id = R.string.password_label)) },
+            isError = uiState.passwordError,
+            visualTransformation = PasswordVisualTransformation(),
+        )
+    }
+
+    @Composable
+    fun ErrorSnackBar() {
+        val errorMsgStringId =
+            if (uiState.emailError) R.string.message_invalid_email
+            else if (uiState.passwordError) R.string.message_invalid_password
+            else uiState.loginErrorMsgStringId
+
+        if (errorMsgStringId != 0) {
+            Snackbar(composeModifier("SnackBarErrors")) {
+                Text(text = stringResource(errorMsgStringId))
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .clickable(
@@ -67,7 +119,7 @@ fun LoginFormUI(vm: LoginUIViewModel = hiltViewModel()) {
             .focusRequester(focusRequester)
             .focusable()
 
-    ){
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -75,41 +127,11 @@ fun LoginFormUI(vm: LoginUIViewModel = hiltViewModel()) {
                 .fillMaxHeight()
                 .padding(horizontal = 32.dp, vertical = 60.dp)
         ) {
-            if (!isDarkTheme) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_logo_login),
-                    contentDescription = "Here goes the company logo, trade mark, etc",
-                    modifier = Modifier.testTag("CompanyImage")
-                )
-            } else {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_logo_login_d),
-                    contentDescription = "Here goes the company logo, trade mark, etc",
-                    modifier = Modifier.testTag("CompanyImage")
-                )
-            }
+            Logo()
 
-            OutlinedTextField(
-                value = uiState.email,
-                onValueChange = { vm.onDniChange(it) },
-                modifier = composeModifier("dni")
-                    .onFocusChanged { vm.onDniFocusChange(it) },
-                enabled = !uiState.loading,
-                label = { Text(stringResource(id = R.string.email_label)) },
-                isError = uiState.emailError,
-                //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
+            EmailField()
 
-            OutlinedTextField(
-                value = uiState.password,
-                onValueChange = { vm.onPasswordChange(it) },
-                modifier = composeModifier("password")
-                    .onFocusChanged { vm.onPasswordChange(it) },
-                enabled = !uiState.loading,
-                label = { Text(text = stringResource(id = R.string.password_label)) },
-                isError = uiState.passwordError,
-                visualTransformation = PasswordVisualTransformation(),
-            )
+            PasswordField()
 
             Button(
                 onClick = { vm.postLogin() },
@@ -120,20 +142,7 @@ fun LoginFormUI(vm: LoginUIViewModel = hiltViewModel()) {
                 content = { Text(text = stringResource(id = R.string.login_label_button)) }
             )
         }
-        if (uiState.emailError || uiState.passwordError) {
-            Snackbar(composeModifier("SnackBarErrors")) {
-                val textToShow =
-                    if (uiState.emailError) R.string.message_invalid_email
-                    else R.string.message_invalid_password
-                Text(text = stringResource(textToShow))
-            }
-        }
-
-        if (uiState.loginErrorMsgStringId != 0) {
-            Snackbar(composeModifier("SnackBarErrors")) {
-                Text(text = stringResource(uiState.loginErrorMsgStringId))
-            }
-        }
+        ErrorSnackBar()
 
         if (uiState.loading) {
             CircularProgressIndicator(

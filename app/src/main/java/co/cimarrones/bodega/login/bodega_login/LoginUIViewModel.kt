@@ -80,6 +80,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     }
 
     fun postLogin() {
+        resetLoginErrorMessage()
         setLoading(true)
         viewModelScope.launch {
             try {
@@ -88,12 +89,39 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
                     val token = response.body()?.token!!
                     _token.postValue(token)
                 }
+                if (!response.isSuccessful) {
+                    handleUnsuccessfulResponse(response.code())
+                }
             } catch (e: Exception) {
-                println(e)
+                if (e is java.net.SocketTimeoutException) _uiState.update { currentState ->
+                    currentState.copy(loginErrorMsgStringId = R.string.socket_timeout_error_message)
+                }
+
+                if (e is java.net.ConnectException) _uiState.update { currentState ->
+                    currentState.copy(loginErrorMsgStringId = R.string.unreachable_server_error_message)
+                }
             } finally {
                 setLoading(false)
             }
         }
+    }
+
+    private fun resetLoginErrorMessage() {
+        _uiState.update { currentState ->
+            currentState.copy(loginErrorMsgStringId = 0)
+        }
+    }
+
+    private fun handleUnsuccessfulResponse(responseCode: Int) {
+        var emStringId = 0
+        when (responseCode) {
+            400 -> emStringId = R.string.wrong_credentials_error_message
+            404 -> emStringId = R.string.wrong_credentials_error_message
+            412 -> emStringId = R.string.disabled_user_error_message
+            418 -> emStringId = R.string.account_not_confirmed_error_message
+            500 -> emStringId = R.string.internal_server_error_message
+        }
+        _uiState.update { currentState -> currentState.copy(loginErrorMsgStringId = emStringId) }
     }
 
 }

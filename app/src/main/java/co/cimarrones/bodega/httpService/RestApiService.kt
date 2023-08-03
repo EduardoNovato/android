@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
 object RetrofitBuilder {
-    private const val BASE_URL = "http://192.168.0.100:8080"
+    private const val BASE_URL = "http://192.168.1.133:8080"
 
     @OptIn(ExperimentalSerializationApi::class)
     private fun getRetrofit(context: Context): Retrofit {
