@@ -1,11 +1,12 @@
 package co.cimarrones.bodega.login.utils
 
-import co.cimarrones.bodega.login.bodega_login.LoginUIViewModel
+import co.cimarrones.bodega.login.login.LoginUIViewModel
 import java.util.regex.Pattern
 
-fun isEmailValid(email: String): Boolean {
-    val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
-    val pattern = Pattern.compile(emailPattern)
+fun isUserNameValid(email: String): Boolean {
+    //val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+    val userNamePattern = "^[a-zA-Z0-9@/./+/-/_]+$"
+    val pattern = Pattern.compile(userNamePattern)
     return pattern.matcher(email).matches()
 }
 

@@ -1,10 +1,10 @@
-package co.cimarrones.bodega.login.bodega_login
+package co.cimarrones.bodega.login.login
 
 data class LoginFormUIState(
     val loading: Boolean = false,
-    val email: String = "",
+    val userName: String = "",
     val password: String = "",
-    val emailError: Boolean = false,
+    val userNameError: Boolean = false,
     val passwordError: Boolean = false,
     val internetConnection: Boolean = false,
     val loginErrorMsgStringId: Int = 0,

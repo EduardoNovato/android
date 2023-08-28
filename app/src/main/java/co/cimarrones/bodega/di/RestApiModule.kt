@@ -16,7 +16,7 @@ class RestApiModule {
 
     @Provides
     @Singleton
-    fun providesRestApi(@ApplicationContext appContext: Context) : IRestAPIService {
+    fun providesRestApi(@ApplicationContext appContext: Context): IRestAPIService {
         return RetrofitBuilder.getApiService(appContext)
     }
 }

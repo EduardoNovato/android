@@ -9,6 +9,7 @@ import retrofit2.http.POST
 
 interface IRestAPIService {
     @Headers("Content-Type:application/json")
-    @POST("auth/login")
-    suspend fun login(@Body lr: LoginRequest): Response<JWToken>
+    @POST("auth")
+    suspend fun login(@Body loginRequest: LoginRequest): Response<JWToken>
+
 }

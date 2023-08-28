@@ -1,14 +1,13 @@
-package co.cimarrones.bodega.login.bodega_login
+package co.cimarrones.bodega.login.login
 
 import androidx.compose.ui.focus.FocusState
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.cimarrones.bodega.R
 import co.cimarrones.bodega.login.IAuthRepository
-import co.cimarrones.bodega.login.utils.isEmailValid
 import co.cimarrones.bodega.login.utils.isPasswordValid
+import co.cimarrones.bodega.login.utils.isUserNameValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,12 +25,12 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     }
 
     private var _token = MutableLiveData("")
-    var token: LiveData<String> = _token
+
+    /*var token: LiveData<String> = _token
 
     fun setToken(token: String) {
         _token.value = token
-    }
-
+    }*/
     private val _uiState = MutableStateFlow(LoginFormUIState())
     val uiState: StateFlow<LoginFormUIState> = _uiState.asStateFlow()
 
@@ -39,20 +38,20 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
         _uiState.update { currentState -> currentState.copy(loading = loading) }
     }
 
-    fun onDniChange(dni: String) {
-        _uiState.update { currentState -> currentState.copy(email = dni.trim()) }
+    fun onUserNameChange(userName: String) {
+        _uiState.update { currentState -> currentState.copy(userName = userName.trim()) }
     }
 
     fun onPasswordChange(pass: String) {
         _uiState.update { currentState -> currentState.copy(password = pass.trim()) }
     }
 
-    fun onDniFocusChange(fs: FocusState) {
-        val currentDni = _uiState.value.email
-        val dniError = !fs.isFocused && currentDni.isNotBlank() && !isEmailValid(currentDni)
+    fun onUserNameFocusChange(fs: FocusState) {
+        val currentUserName = _uiState.value.userName
+        val userNameError = !fs.isFocused && currentUserName.isNotBlank() && !isUserNameValid(currentUserName)
 
         _uiState.update { currentState ->
-            currentState.copy(emailError = dniError)
+            currentState.copy(userNameError = userNameError)
         }
     }
 
@@ -76,7 +75,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     }
 
     fun isFormValid(): Boolean {
-        return isEmailValid(_uiState.value.email) && isPasswordValid(_uiState.value.password)
+        return isUserNameValid(_uiState.value.userName) && isPasswordValid(_uiState.value.password)
     }
 
     fun postLogin() {
@@ -84,7 +83,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
         setLoading(true)
         viewModelScope.launch {
             try {
-                val response = authRepository.login(_uiState.value.email, _uiState.value.password)
+                val response = authRepository.login(_uiState.value.userName, _uiState.value.password)
                 if (response.isSuccessful) {
                     val token = response.body()?.token!!
                     _token.postValue(token)

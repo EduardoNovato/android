@@ -1,24 +1,21 @@
 package co.cimarrones.bodega.httpService
 
 import android.content.Context
-import co.cimarrones.bodega.login.utils.TokenService
+import co.cimarrones.bodega.login.TokenService
 import okhttp3.Interceptor
 import okhttp3.Response
-
 
 class AuthInterceptor(context: Context) : Interceptor {
     private val ctx = context
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = TokenService.getToken(ctx)
         val requestBuilder = chain.request().newBuilder()
-        // If token has been saved, add it to the request
         if (token != "") {
-            requestBuilder.addHeader("Authorization", "Bearer $token")
+            requestBuilder.addHeader("token", token)
         }
         return chain.proceed(requestBuilder.build())
     }
 }
-
 class RedirectInterceptor(context: Context) : Interceptor {
     private val ctx = context
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -30,3 +27,4 @@ class RedirectInterceptor(context: Context) : Interceptor {
         return response
     }
 }
+

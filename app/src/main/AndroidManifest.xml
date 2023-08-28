@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".BodegaApplication"
@@ -14,9 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bodega"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".login.bodega_login.LoginUIActivity"
+            android:name=".login.login.LoginUIActivity"
             android:exported="true"
             android:theme="@style/Theme.Bodega"
             >
