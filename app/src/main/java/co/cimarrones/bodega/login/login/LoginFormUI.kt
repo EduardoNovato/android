@@ -1,5 +1,7 @@
 package co.cimarrones.bodega.login.login
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -43,76 +45,24 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import co.cimarrones.bodega.R
-import co.cimarrones.bodega.login.SING_UP
-import co.cimarrones.bodega.login.WELKON
+import co.cimarrones.bodega.main.Screen
 import co.cimarrones.bodega.ui.theme.Shapes
 
+@SuppressLint("ModifierFactoryExtensionFunction")
+fun composeModifier(testTag: String): Modifier {
+    val padding = 8.dp
+    return Modifier
+        .testTag(testTag)
+        .padding(padding)
+        .fillMaxWidth()
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginFormUI(vm: LoginUIViewModel = hiltViewModel()) {
+fun LoginFormUI(navigateTo: () -> Unit, vm: LoginUIViewModel = hiltViewModel()) {
     val isDarkTheme = isSystemInDarkTheme()
     val uiState by vm.uiState.collectAsState()
 
     val focusRequester = remember { FocusRequester() }
-
-    fun composeModifier(testTag: String): Modifier {
-        val padding = 8.dp
-        return Modifier
-            .testTag(testTag)
-            .padding(padding)
-            .fillMaxWidth()
-    }
-
-    @Composable
-    fun Logo() {
-        val logoResource = if (isDarkTheme) R.drawable.ic_logo_login_d else R.drawable.ic_logo_login
-        Image(
-            painter = painterResource(id = logoResource),
-            contentDescription = "stringResource(id = R.string.logo_content_description)",
-            modifier = Modifier.testTag("icon-logo-login")
-        )
-    }
-
-    @Composable
-    fun EmailField() {
-        OutlinedTextField(
-            value = uiState.userName,
-            onValueChange = { vm.onUserNameChange(it) },
-            modifier = composeModifier("email")
-                .onFocusChanged { vm.onUserNameFocusChange(it) },
-            enabled = !uiState.loading,
-            label = { Text(stringResource(id = R.string.email_label)) },
-            isError = uiState.userNameError,
-        )
-    }
-
-    @Composable
-    fun PasswordField() {
-        OutlinedTextField(
-            value = uiState.password,
-            onValueChange = { vm.onPasswordChange(it) },
-            modifier = composeModifier("password")
-                .onFocusChanged { vm.onPasswordChange(it) },
-            enabled = !uiState.loading,
-            label = { Text(stringResource(id = R.string.password_label)) },
-            isError = uiState.passwordError,
-            visualTransformation = PasswordVisualTransformation(),
-        )
-    }
-
-    @Composable
-    fun ErrorSnackBar() {
-        val errorMsgStringId =
-            if (uiState.userNameError) R.string.message_invalid_email
-            else if (uiState.passwordError) R.string.message_invalid_password
-            else uiState.loginErrorMsgStringId
-
-        if (errorMsgStringId != 0) {
-            Snackbar(composeModifier("snack-bar")) {
-                Text(text = stringResource(errorMsgStringId))
-            }
-        }
-    }
 
     Box(
         modifier = Modifier
@@ -132,11 +82,28 @@ fun LoginFormUI(vm: LoginUIViewModel = hiltViewModel()) {
                 .fillMaxHeight()
                 .padding(horizontal = 32.dp, vertical = 60.dp)
         ) {
-            Logo()
+            Logo(isDarkTheme)
 
-            EmailField()
+            OutlinedTextField(
+                value = uiState.userName,
+                onValueChange = { vm.onUserNameChange(it) },
+                modifier = composeModifier("email")
+                    .onFocusChanged { vm.onUserNameFocusChange(it) },
+                enabled = !uiState.loading,
+                label = { Text(stringResource(id = R.string.email_label)) },
+                isError = uiState.userNameError,
+            )
 
-            PasswordField()
+            OutlinedTextField(
+                value = uiState.password,
+                onValueChange = { vm.onPasswordChange(it) },
+                modifier = composeModifier("password")
+                    .onFocusChanged { vm.onPasswordChange(it) },
+                enabled = !uiState.loading,
+                label = { Text(stringResource(id = R.string.password_label)) },
+                isError = uiState.passwordError,
+                visualTransformation = PasswordVisualTransformation(),
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -160,23 +127,23 @@ fun LoginFormUI(vm: LoginUIViewModel = hiltViewModel()) {
             ) {
                 ClickableText(
                     text = buildAnnotatedString {
-                        append("Already have an account?")
+                        append("Do not have an account?")
                         withStyle(
                             style = SpanStyle(
                                 color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Bold
                             )
                         ) {
-                            append(" Sing Up")
+                            append(" Sign up")
                         }
                     },
                     onClick = {
-                        //navigateTo(SING_UP, false)
+                        navigateTo()
                     }
                 )
             }
         }
-        ErrorSnackBar()
+        ErrorSnackBar(uiState)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -189,6 +156,31 @@ fun LoginFormUI(vm: LoginUIViewModel = hiltViewModel()) {
                     .align(Alignment.Center),
                 strokeWidth = 6.dp
             )
+        }
+    }
+}
+
+
+@Composable
+fun Logo(isDarkTheme: Boolean) {
+    val logoResource = if (isDarkTheme) R.drawable.ic_logo_login_d else R.drawable.ic_logo_login
+    Image(
+        painter = painterResource(id = logoResource),
+        contentDescription = "stringResource(id = R.string.logo_content_description)",
+        modifier = Modifier.testTag("icon-logo-login")
+    )
+}
+
+@Composable
+fun ErrorSnackBar(uiState: LoginFormUIState) {
+    val errorMsgStringId =
+        if (uiState.userNameError) R.string.message_invalid_email
+        else if (uiState.passwordError) R.string.message_invalid_password
+        else uiState.loginErrorMsgStringId
+
+    if (errorMsgStringId != 0) {
+        Snackbar(composeModifier("snack-bar")) {
+            Text(text = stringResource(errorMsgStringId))
         }
     }
 }

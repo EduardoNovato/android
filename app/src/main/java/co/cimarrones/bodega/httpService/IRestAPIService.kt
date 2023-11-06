@@ -11,5 +11,4 @@ interface IRestAPIService {
     @Headers("Content-Type:application/json")
     @POST("auth")
     suspend fun login(@Body loginRequest: LoginRequest): Response<JWToken>
-
 }

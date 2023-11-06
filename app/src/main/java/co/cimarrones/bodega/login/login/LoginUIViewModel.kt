@@ -1,6 +1,7 @@
 package co.cimarrones.bodega.login.login
 
 import androidx.compose.ui.focus.FocusState
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,11 +27,11 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
 
     private var _token = MutableLiveData("")
 
-    /*var token: LiveData<String> = _token
+    var token: LiveData<String> = _token
 
     fun setToken(token: String) {
         _token.value = token
-    }*/
+    }
     private val _uiState = MutableStateFlow(LoginFormUIState())
     val uiState: StateFlow<LoginFormUIState> = _uiState.asStateFlow()
 

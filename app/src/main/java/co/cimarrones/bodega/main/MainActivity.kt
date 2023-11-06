@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val vm: LoginUIViewModel by viewModels()
+    val vmLogin: LoginUIViewModel by viewModels()
     val vmSignUp: SignUpViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -31,21 +31,19 @@ class MainActivity : ComponentActivity() {
 
         val req = networkMonitor.buildNetworkRequestObject()
         val callback = networkMonitor.buildNetworkCallbackObject { connected: Boolean ->
-            vm.onNetworkConnectionChange(connected)
+            vmLogin.onNetworkConnectionChange(connected)
         }
         val connectivityManager =
             getSystemService(ConnectivityManager::class.java) as ConnectivityManager
         connectivityManager.requestNetwork(req, callback)
 
         setContent {
-            val navController = rememberNavController()
             BodegaTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //AppNavHost(navController)
                     MainLayout()
                 }
             }

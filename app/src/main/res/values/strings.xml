@@ -11,6 +11,8 @@
     <string name="password_label">Password</string>
     <string name="login_label_button">Login</string>
 
+    <string name="exit">exit</string>
+
     <string name="internal_server_error_message">The server could not process your request please try again, if the problem persist contact support.</string>
     <string name="wrong_credentials_error_message">Wrong Credentials, please try again.</string>
     <string name="unreachable_server_error_message">Server unreachable, please verify is online and working properly.</string>

@@ -1,4 +1,4 @@
-package de.deeping.paperless.main.layout
+package co.cimarrones.bodega.main.layout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.cimarrones.bodega.R
-import co.cimarrones.bodega.login.LOGOUT
 import co.cimarrones.bodega.ui.theme.BodegaTheme
 
 @Preview(showBackground = true)
@@ -100,10 +99,10 @@ data class NavOption(
 
 fun buildNavOptions(): List<NavOption> = listOf(
     NavOption(
-        "LogoutLink",
-        Icons.Filled.ExitToApp,
-        "Link to navigate to login View @logout",
-        LOGOUT,
-        R.string.email_label
+        testTag = "LogoutLink",
+        icon = Icons.Filled.ExitToApp,
+        iconContentDescription = "Link to navigate to login View @logout",
+        destination = "",
+        stringId = R.string.exit
     ),
 )

@@ -1,5 +1,6 @@
 package co.cimarrones.bodega.login.login
 
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,7 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Observer
+import androidx.navigation.compose.rememberNavController
+import co.cimarrones.bodega.login.TokenService
+import co.cimarrones.bodega.main.MainActivity
 import co.cimarrones.bodega.main.NetworkMonitor
+import co.cimarrones.bodega.main.Screen
 import co.cimarrones.bodega.ui.theme.BodegaTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,7 +25,9 @@ class LoginUIActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val vm: LoginUIViewModel by viewModels()
-        // to be able to listen for changes in the network connectivity status
+        val tokenService = TokenService(this)
+        val currentToken = tokenService.getToken()
+        if (currentToken.isNotEmpty()) vm.setToken(currentToken)
         val networkMonitor = NetworkMonitor()
         val req = networkMonitor.buildNetworkRequestObject()
         val callback = networkMonitor.buildNetworkCallbackObject { connected: Boolean ->
@@ -29,16 +37,25 @@ class LoginUIActivity : ComponentActivity() {
             getSystemService(ConnectivityManager::class.java) as ConnectivityManager
         connectivityManager.requestNetwork(req, callback)
 
+        val tokenObserver = Observer<String> { token ->
+            if (token.isNotEmpty()) {
+                tokenService.setToken(token)
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+
+        vm.token.observe(this, tokenObserver)
 
         setContent {
-
+            val navController = rememberNavController()
             BodegaTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginFormUI(vm)
+                    LoginFormUI({ navController.navigate(Screen.SignUp.route) }, vm)
                 }
             }
         }

@@ -2,6 +2,7 @@ package co.cimarrones.bodega.main.layout
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -11,13 +12,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import co.cimarrones.bodega.login.AppNavHost
-import co.cimarrones.bodega.login.LOGOUT
-import co.cimarrones.bodega.login.TokenService
+import co.cimarrones.bodega.main.AppNavHost
 import co.cimarrones.bodega.ui.theme.BodegaTheme
-import de.deeping.paperless.main.layout.MainLayoutDrawer
 import kotlinx.coroutines.launch
 
 
@@ -28,7 +27,7 @@ fun MainLayout() {
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
+    /*val context = LocalContext.current*/
 
     val navController = rememberNavController()
 
@@ -39,8 +38,9 @@ fun MainLayout() {
     }
 
     val navigateToAndCloseDrawer = fun(to: String) {
+        /*val tokenService = TokenService(context)
         if (to == LOGOUT) {
-            TokenService.redirectToLogin(context)
+            tokenService.redirectToLogin()
         } else {
             navController.navigate(to) {
                 navController.popBackStack()
@@ -48,7 +48,7 @@ fun MainLayout() {
             scope.launch {
                 drawerState.close()
             }
-        }
+        }*/
     }
 
     ModalNavigationDrawer(
@@ -57,15 +57,16 @@ fun MainLayout() {
         content = {
             Scaffold(
                 topBar = { MainLayoutTopBar(openDrawer = openDrawer) },
-                content = { it//padding ->
+                content = { padding ->
                     AppNavHost(
                         navController = navController,
-                        //containerPadding = padding
+                        modifier = Modifier.padding(padding)
                     )
                 }
             )
         }
     )
+
 }
 
 
@@ -92,13 +93,11 @@ fun MainLayoutTopBar(openDrawer: () -> Unit) {
         title = { Text(text = "hola", color = MaterialTheme.colorScheme.onPrimary) })
 }
 
-@Preview
+@Preview(device = Devices.PHONE)
 @Composable
 fun PreviewMainLayoutTopBar() {
     BodegaTheme() {
-        MainLayoutTopBar {
-
-        }
+        MainLayoutTopBar {}
     }
 }
 

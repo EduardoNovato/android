@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,7 +38,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import co.cimarrones.bodega.R
-import co.cimarrones.bodega.login.LOGIN
 import co.cimarrones.bodega.main.utils.DialogTitle
 import co.cimarrones.bodega.ui.theme.Shapes
 
@@ -58,7 +56,7 @@ fun Logo() {
 @Composable
 fun RegistrationScreen(
     vm: SignUpViewModel = hiltViewModel(),
-    navigateTo: (String, Boolean?) -> Unit
+    navigateTo: () -> Unit
 ) {
 
     val nameValue = remember { mutableStateOf("") }
@@ -224,7 +222,7 @@ fun RegistrationScreen(
                         }
                     },
                     onClick = {
-                        navigateTo(LOGIN, false)
+                        navigateTo()
                     }
                 )
             }
@@ -236,6 +234,6 @@ fun RegistrationScreen(
 @Preview(showBackground = true)
 @Composable
 fun A() {
-    val fn = fun(_: String, _: Boolean?) {}
+    val fn = fun() {}
     RegistrationScreen(navigateTo = fn)
 }
