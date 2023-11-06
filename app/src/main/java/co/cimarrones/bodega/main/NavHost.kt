@@ -22,7 +22,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) 
     NavHost(navController = navController, startDestination = Screen.Welcome.route, modifier = modifier) {
 
         composable(Screen.Login.route) {
-            LoginFormUI( navController = { navController.navigate(Screen.SignUp.route) }, vm = context.vmLogin )
+            LoginFormUI( navigateTo = { navController.navigate(Screen.SignUp.route) }, vm = context.vmLogin )
         }
         composable(Screen.SignUp.route) {
             RegistrationScreen(vm = context.vmSignUp, navigateTo = { navController.navigate(route=Screen.Login.route) })
