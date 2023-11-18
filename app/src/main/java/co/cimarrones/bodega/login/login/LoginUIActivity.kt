@@ -29,8 +29,7 @@ class LoginUIActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val tokenService = TokenService(this)
-        val currentToken = tokenService.getToken()
+        val currentToken = TokenService.getToken(this)
         if (currentToken.isNotEmpty()) vmLogin.setToken(currentToken)
         val networkMonitor = NetworkMonitor()
         val req = networkMonitor.buildNetworkRequestObject()
@@ -42,8 +41,8 @@ class LoginUIActivity : ComponentActivity() {
         connectivityManager.requestNetwork(req, callback)
 
         val tokenObserver = Observer<String> { token ->
-            if (token.isNotEmpty()) {
-                tokenService.setToken(token)
+            if (TokenService.isTokenValid(token)) {
+                TokenService.setToken(context = this, token = token)
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()

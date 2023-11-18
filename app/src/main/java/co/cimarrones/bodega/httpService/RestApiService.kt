@@ -12,21 +12,20 @@ object RetrofitBuilder {
 
     private const val BASE_URL = "http://192.168.1.104:8080"
     @OptIn(ExperimentalSerializationApi::class)
-    fun getApiService(context: Context): IRestAPIService {
-        val retrofit = Retrofit.Builder()
+    fun getRetrofit(context: Context): Retrofit {
+        return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(JsonParserConfig.asConverterFactory("application/json".toMediaTypeOrNull()!!))
             .client(okhttpClient(context))
             .build()
-
-        return retrofit.create(IRestAPIService::class.java)
     }
+    fun getApiService(context: Context): IRestAPIService =
+        getRetrofit(context).create(IRestAPIService::class.java)
 }
 
 private fun okhttpClient(context: Context): OkHttpClient {
-    val tokenService = TokenService(context)
     return OkHttpClient.Builder()
-        .addInterceptor(AuthInterceptor(tokenService))
-        .addInterceptor(RedirectInterceptor(tokenService))
+        .addInterceptor(AuthInterceptor(context = context))
+        .addInterceptor(RedirectInterceptor(context = context))
         .build()
 }

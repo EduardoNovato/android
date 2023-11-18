@@ -21,4 +21,7 @@ interface IRestAPIService {
     @GET("containers/")
     suspend fun getContainers(): ResponseBody
 
+    @Headers("Content-Type:application/json")
+    @GET("users/{userID}")
+    suspend fun getUserById(@Path("userID") userID: String, @QueryMap options: Map<String, String> = emptyMap()): ResponseBody
 }

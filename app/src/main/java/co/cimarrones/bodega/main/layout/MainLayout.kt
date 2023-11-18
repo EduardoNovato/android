@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import co.cimarrones.bodega.login.AppNavHostLogin
 import co.cimarrones.bodega.login.TokenService
 import co.cimarrones.bodega.main.AppNavHost
 import co.cimarrones.bodega.main.Screen
@@ -41,9 +40,8 @@ fun MainLayout() {
     }
 
     val navigateToAndCloseDrawer = fun(to: String) {
-        val tokenService = TokenService(context)
         if (to == Screen.LogOut.route) {
-            tokenService.redirectToLogin()
+            TokenService.redirectToLogin(context)
         } else {
             navController.navigate(to) {
                 navController.popBackStack()
@@ -99,7 +97,7 @@ fun MainLayoutTopBar(openDrawer: () -> Unit) {
 @Preview(device = Devices.PHONE)
 @Composable
 fun PreviewMainLayoutTopBar() {
-    BodegaTheme() {
+    BodegaTheme {
         MainLayoutTopBar {}
     }
 }

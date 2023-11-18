@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.cimarrones.bodega.R
 import co.cimarrones.bodega.login.ScreenLogin
+import co.cimarrones.bodega.login.TokenService
 import co.cimarrones.bodega.main.Screen
 import co.cimarrones.bodega.ui.theme.BodegaTheme
 
@@ -43,7 +44,7 @@ fun MainLayoutDrawer(navigateToAndCloseDrawer: (String) -> Unit) {
 
 @Composable
 fun MainLayoutDrawerHeader() {
-    //val email = TokenService.getEmailFromToken()
+    //val username = TokenService.getUsername()
     Row(
         modifier = Modifier
             .testTag("DrawerHeader")
@@ -61,7 +62,7 @@ fun MainLayoutDrawerHeader() {
             )
             Spacer(modifier = Modifier.size(8.dp))
             Text(
-                text = "loco", color = MaterialTheme.colorScheme.onPrimary, fontSize = 12.sp
+                text = "username", color = MaterialTheme.colorScheme.onPrimary, fontSize = 12.sp
             )
         }
     }
