@@ -20,14 +20,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val vmLogin: LoginUIViewModel by viewModels()
-    val vmSignUp: SignUpViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val networkMonitor = NetworkMonitor()
+        /*val networkMonitor = NetworkMonitor()
 
         val req = networkMonitor.buildNetworkRequestObject()
         val callback = networkMonitor.buildNetworkCallbackObject { connected: Boolean ->
@@ -35,7 +33,7 @@ class MainActivity : ComponentActivity() {
         }
         val connectivityManager =
             getSystemService(ConnectivityManager::class.java) as ConnectivityManager
-        connectivityManager.requestNetwork(req, callback)
+        connectivityManager.requestNetwork(req, callback)*/
 
         setContent {
             BodegaTheme {

@@ -12,7 +12,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Observer
 import androidx.navigation.compose.rememberNavController
+import co.cimarrones.bodega.login.AppNavHostLogin
 import co.cimarrones.bodega.login.TokenService
+import co.cimarrones.bodega.login.signUp.SignUpViewModel
 import co.cimarrones.bodega.main.MainActivity
 import co.cimarrones.bodega.main.NetworkMonitor
 import co.cimarrones.bodega.main.Screen
@@ -21,17 +23,19 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginUIActivity : ComponentActivity() {
+
+    val vmLogin: LoginUIViewModel by viewModels()
+    val vmSignUp: SignUpViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val vm: LoginUIViewModel by viewModels()
         val tokenService = TokenService(this)
         val currentToken = tokenService.getToken()
-        if (currentToken.isNotEmpty()) vm.setToken(currentToken)
+        if (currentToken.isNotEmpty()) vmLogin.setToken(currentToken)
         val networkMonitor = NetworkMonitor()
         val req = networkMonitor.buildNetworkRequestObject()
         val callback = networkMonitor.buildNetworkCallbackObject { connected: Boolean ->
-            vm.onNetworkConnectionChange(connected)
+            vmLogin.onNetworkConnectionChange(connected)
         }
         val connectivityManager =
             getSystemService(ConnectivityManager::class.java) as ConnectivityManager
@@ -46,7 +50,7 @@ class LoginUIActivity : ComponentActivity() {
             }
         }
 
-        vm.token.observe(this, tokenObserver)
+        vmLogin.token.observe(this, tokenObserver)
 
         setContent {
             val navController = rememberNavController()
@@ -55,7 +59,7 @@ class LoginUIActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginFormUI({ navController.navigate(Screen.SignUp.route) }, vm)
+                    AppNavHostLogin(navController)
                 }
             }
         }

@@ -19,5 +19,6 @@ data class LoginRequest(val username: String, val password: String)
 
 @Serializable
 data class JWToken(
-    val token: String
+    val access: String,
+    val refresh: String
 )

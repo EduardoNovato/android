@@ -86,7 +86,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
             try {
                 val response = authRepository.login(_uiState.value.userName, _uiState.value.password)
                 if (response.isSuccessful) {
-                    val token = response.body()?.token!!
+                    val token = response.body()?.access!!
                     _token.postValue(token)
                 }
                 if (!response.isSuccessful) {

@@ -2,30 +2,26 @@ package co.cimarrones.bodega.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import co.cimarrones.bodega.login.login.LoginFormUI
-import co.cimarrones.bodega.login.signUp.RegistrationScreen
+import co.cimarrones.bodega.main.modules.details.WelcomeScreen
+import co.cimarrones.bodega.main.modules.details.container.ContainerView
+
 
 sealed class Screen(val route: String) {
     object Welcome : Screen("welcome")
-    object Login : Screen("login")
-    object SignUp : Screen("sign-up")
+    object Container : Screen("container")
+    object LogOut: Screen("log-out")
 }
-
 @Composable
-fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
-    val context = LocalContext.current as MainActivity
-
+fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier){
     NavHost(navController = navController, startDestination = Screen.Welcome.route, modifier = modifier) {
-
-        composable(Screen.Login.route) {
-            LoginFormUI( navigateTo = { navController.navigate(Screen.SignUp.route) }, vm = context.vmLogin )
+        composable(Screen.Welcome.route) {
+            WelcomeScreen()
         }
-        composable(Screen.SignUp.route) {
-            RegistrationScreen(vm = context.vmSignUp, navigateTo = { navController.navigate(route=Screen.Login.route) })
+        composable(Screen.Container.route){
+            ContainerView()
         }
     }
 }

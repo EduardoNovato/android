@@ -10,14 +10,14 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 
 object RetrofitBuilder {
 
-    private const val BASE_URL = "http://192.168.1.107:8080"
+    private const val BASE_URL = "http://192.168.1.104:8080"
     @OptIn(ExperimentalSerializationApi::class)
     fun getApiService(context: Context): IRestAPIService {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(JsonParserConfig.asConverterFactory("application/json".toMediaTypeOrNull()!!))
-            .client(okhttpClient(context)) // Add our Okhttp client
-            .build() //Doesn't require the adapter
+            .client(okhttpClient(context))
+            .build()
 
         return retrofit.create(IRestAPIService::class.java)
     }

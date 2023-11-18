@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,6 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.cimarrones.bodega.R
+import co.cimarrones.bodega.login.ScreenLogin
+import co.cimarrones.bodega.main.Screen
 import co.cimarrones.bodega.ui.theme.BodegaTheme
 
 @Preview(showBackground = true)
@@ -99,10 +103,24 @@ data class NavOption(
 
 fun buildNavOptions(): List<NavOption> = listOf(
     NavOption(
+        testTag = "container-link",
+        icon = Icons.Filled.Warning,
+        iconContentDescription = "Link to navigate to container",
+        destination = Screen.Container.route,
+        stringId = R.string.container
+    ),
+    NavOption(
+        testTag = "category-link",
+        icon = Icons.Filled.List,
+        iconContentDescription = "Link to navigate to category",
+        destination = "",
+        stringId = R.string.category
+    ),
+    NavOption(
         testTag = "LogoutLink",
         icon = Icons.Filled.ExitToApp,
         iconContentDescription = "Link to navigate to login View @logout",
-        destination = "",
+        destination = Screen.LogOut.route,
         stringId = R.string.exit
     ),
 )

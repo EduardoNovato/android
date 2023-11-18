@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun DialogTitle(testTag: String, text: String) {
@@ -22,5 +23,30 @@ fun DialogTitle(testTag: String, text: String) {
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.titleLarge,
         color = Color.Black
+    )
+}
+
+@Composable
+fun LabelText(testTag: String, label: String, textAlign: TextAlign = TextAlign.Left) {
+    Text(
+        text = label,
+        style = MaterialTheme.typography.labelSmall,
+        modifier = Modifier
+            .testTag(testTag)
+            .fillMaxWidth(),
+        textAlign = textAlign
+    )
+}
+
+@Composable
+fun PrimaryTextValue(testTag: String, value: String, textAlign: TextAlign = TextAlign.Left) {
+    Text(
+        text = value,
+        style = MaterialTheme.typography.labelSmall,
+        modifier = Modifier
+            .testTag(testTag)
+            .fillMaxWidth(),
+        fontSize = 16.sp,
+        textAlign = textAlign
     )
 }

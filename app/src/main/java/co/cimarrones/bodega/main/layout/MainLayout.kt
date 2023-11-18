@@ -15,7 +15,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import co.cimarrones.bodega.login.AppNavHostLogin
+import co.cimarrones.bodega.login.TokenService
 import co.cimarrones.bodega.main.AppNavHost
+import co.cimarrones.bodega.main.Screen
 import co.cimarrones.bodega.ui.theme.BodegaTheme
 import kotlinx.coroutines.launch
 
@@ -27,7 +30,7 @@ fun MainLayout() {
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    /*val context = LocalContext.current*/
+    val context = LocalContext.current
 
     val navController = rememberNavController()
 
@@ -38,8 +41,8 @@ fun MainLayout() {
     }
 
     val navigateToAndCloseDrawer = fun(to: String) {
-        /*val tokenService = TokenService(context)
-        if (to == LOGOUT) {
+        val tokenService = TokenService(context)
+        if (to == Screen.LogOut.route) {
             tokenService.redirectToLogin()
         } else {
             navController.navigate(to) {
@@ -48,7 +51,7 @@ fun MainLayout() {
             scope.launch {
                 drawerState.close()
             }
-        }*/
+        }
     }
 
     ModalNavigationDrawer(
@@ -90,7 +93,7 @@ fun MainLayoutTopBar(openDrawer: () -> Unit) {
                 }
             )
         },
-        title = { Text(text = "hola", color = MaterialTheme.colorScheme.onPrimary) })
+        title = { Text(text = "Hi", color = MaterialTheme.colorScheme.onPrimary) })
 }
 
 @Preview(device = Devices.PHONE)
